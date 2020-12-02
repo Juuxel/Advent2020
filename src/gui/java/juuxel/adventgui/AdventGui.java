@@ -13,6 +13,7 @@ import org.pushingpixels.substance.extras.api.skinpack.SubstanceMangoLookAndFeel
 
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -25,6 +26,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.IntConsumer;
 
 public final class AdventGui {
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor(r -> new Thread(r, "Advent"));
@@ -57,15 +59,35 @@ public final class AdventGui {
             JPanel panel = new JPanel(new BorderLayout());
             JList<Entry> entries = new JList<>(ENTRIES);
             JButton run = new JButton("Run");
-            JButton load = new JButton("Load data");
+            JButton load = new JButton("Load input");
+            JButton loadToday = new JButton("Today's input");
             JTextArea input = new JTextArea();
             JTextArea output = new JTextArea();
             JPanel inputArea = new JPanel(new BorderLayout());
+            JPanel inputButtons = new JPanel(new GridLayout(1, 0));
             JScrollPane inputScroll = new JScrollPane(input);
             JScrollPane outputScroll = new JScrollPane(output);
             JSplitPane sideSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(entries), inputArea);
             JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sideSplit, outputScroll);
             JFrame frame = new JFrame("Advent of Code 2020");
+
+            IntConsumer setData = day -> {
+                try {
+                    String name = "/day" + day + ".txt";
+                    InputStream in = AdventGui.class.getResourceAsStream(name);
+
+                    if (in == null) {
+                        JOptionPane.showMessageDialog(load, "It's not " + day + " December yet!", "Could not find data", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    try (in) {
+                        input.setText(new String(in.readAllBytes(), StandardCharsets.UTF_8));
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            };
 
             entries.setSelectedIndex(0);
             for (Entry entry : ENTRIES) {
@@ -78,8 +100,10 @@ public final class AdventGui {
             output.setEditable(false);
             sideSplit.setDividerLocation(0.5);
 
+            inputButtons.add(load);
+            inputButtons.add(loadToday);
             inputArea.add(inputScroll, BorderLayout.CENTER);
-            inputArea.add(load, BorderLayout.SOUTH);
+            inputArea.add(inputButtons, BorderLayout.SOUTH);
             inputArea.setBorder(BorderFactory.createTitledBorder("Input"));
             outputScroll.setBorder(BorderFactory.createTitledBorder("Output"));
 
@@ -118,24 +142,11 @@ public final class AdventGui {
                 dialog.setVisible(true);
 
                 if (!accepted[0]) return;
-
-                try {
-                    int day = slider.getValue();
-                    String name = "/day" + day + ".txt";
-                    InputStream in = AdventGui.class.getResourceAsStream(name);
-
-                    if (in == null) {
-                        JOptionPane.showMessageDialog(load, "It's not " + day + " December yet!", "Could not find data", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    try (in) {
-                        input.setText(new String(in.readAllBytes(), StandardCharsets.UTF_8));
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                int day = slider.getValue();
+                setData.accept(day);
             });
+
+            loadToday.addActionListener(e -> setData.accept(CURRENT_DAY));
 
             Writer outputWriter = new TextAreaWriter(output);
             // Sorry Yegor, but this is not "OO". Cactoos' IO converters are just too convenient, though ;)
