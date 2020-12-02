@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,7 +28,13 @@ import java.util.concurrent.Executors;
 public final class AdventGui {
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor(r -> new Thread(r, "Advent"));
     private static final NumberFormat TIME_FORMAT = new DecimalFormat("#######.###");
-    private static final int CURRENT_DAY = Math.min(25, Math.max(1, LocalDate.now().getDayOfMonth()));;
+    private static final int CURRENT_DAY;
+
+    static {
+        LocalDate today = LocalDate.now();
+        int currentDayUnclamped = today.getMonth() == Month.DECEMBER ? today.getDayOfMonth() : 1;
+        CURRENT_DAY = Math.min(currentDayUnclamped, 25);
+    }
 
     private static final Entry[] ENTRIES = {
         new Entry("Day 1 (Kotlin)", 1, Day1Kt::main),
