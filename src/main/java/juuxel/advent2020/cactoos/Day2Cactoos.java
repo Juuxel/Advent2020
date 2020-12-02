@@ -1,6 +1,5 @@
 package juuxel.advent2020.cactoos;
 
-import org.cactoos.Func;
 import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.io.TeeInput;
