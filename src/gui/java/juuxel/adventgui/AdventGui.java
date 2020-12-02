@@ -2,6 +2,7 @@ package juuxel.adventgui;
 
 import juuxel.advent2020.arrow.Day1ArrowKt;
 import juuxel.advent2020.cactoos.Day1Cactoos;
+import juuxel.advent2020.cactoos.Day2Cactoos;
 import juuxel.advent2020.regular.Day1Kt;
 import juuxel.advent2020.regular.Day2Kt;
 import org.cactoos.io.OutputStreamTo;
@@ -33,6 +34,7 @@ public final class AdventGui {
         new Entry("Day 1 (Kotlin, Arrow)", 1, Day1ArrowKt::nonSuspend),
         new Entry("Day 1 (Java, Cactoos)", 1, Day1Cactoos::main),
         new Entry("Day 2 (Kotlin)", 2, Day2Kt::main),
+        new Entry("Day 2 (Java, Cactoos)", 2, Day2Cactoos::main),
     };
 
     public static void main(String[] args) {
