@@ -17,6 +17,10 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "Cotton"
+        url = uri("https://server.bbkr.space/artifactory/libs-release")
+    }
 }
 
 dependencies {
@@ -27,6 +31,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow"
     implementation "io.arrow-kt:arrow-fx:$arrow"
     implementation "io.arrow-kt:arrow-syntax:$arrow"
+
+    implementation "io.github.juuxel:leaf-through:1.3.0"
 
     guiImplementation "org.pushing-pixels:radiance-substance:3.5.1"
     guiImplementation "org.pushing-pixels:radiance-substance-extras:3.5.1"
