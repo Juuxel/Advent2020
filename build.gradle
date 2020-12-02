@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.20'
+}
+
+group 'io.github.juuxel'
+version '1'
+
+sourceSets {
+    gui
+}
+
+configurations {
+    guiCompileClasspath.extendsFrom compileClasspath
+    guiRuntimeClasspath.extendsFrom runtimeClasspath
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.cactoos:cactoos:0.48"
+
+    def arrow = "0.11.0"
+    implementation "io.arrow-kt:arrow-core:$arrow"
+    implementation "io.arrow-kt:arrow-fx:$arrow"
+    implementation "io.arrow-kt:arrow-syntax:$arrow"
+
+    guiImplementation "org.pushing-pixels:radiance-substance:3.5.1"
+    guiImplementation "org.pushing-pixels:radiance-substance-extras:3.5.1"
+    guiImplementation sourceSets.main.output
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += "--enable-preview"
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Test) {
+    jvmArgs += "--enable-preview"
+}
+tasks.withType(JavaExec) {
+    jvmArgs += "--enable-preview"
+}

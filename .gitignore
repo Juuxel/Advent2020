@@ -1,0 +1,5 @@
+build/
+out/
+.gradle/
+.idea/
+src/main/resources/day*.txt
