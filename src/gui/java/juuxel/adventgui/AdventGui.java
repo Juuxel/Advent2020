@@ -3,6 +3,7 @@ package juuxel.adventgui;
 import juuxel.advent2020.arrow.Day1ArrowKt;
 import juuxel.advent2020.cactoos.Day1Cactoos;
 import juuxel.advent2020.cactoos.Day2Cactoos;
+import juuxel.advent2020.cactoos.Day3Cactoos;
 import juuxel.advent2020.misc.Day2AltKt;
 import juuxel.advent2020.regular.Day1Kt;
 import juuxel.advent2020.regular.Day2Kt;
@@ -48,6 +49,7 @@ public final class AdventGui {
         new Entry("Day 2 (Java, Cactoos)", 2, Day2Cactoos::main),
         new Entry("Day 2 (Kotlin + Leaf Through)", 2, Day2AltKt::main),
         new Entry("Day 3 (Kotlin)", 3, Day3Kt::main),
+        new Entry("Day 3 (Java, Cactoos)", 3, Day3Cactoos::main),
     };
 
     public static void main(String[] args) {
