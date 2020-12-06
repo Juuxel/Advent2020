@@ -156,7 +156,7 @@ public final class AdventGui {
                 setData.accept(day);
             });
 
-            loadToday.addActionListener(e -> setData.accept(CURRENT_DAY));
+            loadToday.addActionListener(e -> setData.accept(entries.getSelectedValue().day()));
 
             Writer outputWriter = new TextAreaWriter(output);
             // Sorry Yegor, but this is not "OO". Cactoos' IO converters are just too convenient, though ;)
