@@ -29,24 +29,19 @@ private val REQUIRED_FIELDS: Map<String, (String) -> Boolean> = (ALL_FIELDS - "c
 fun main(args: Array<String>) {
     var part1 = 0
     var part2 = 0
-    val map: MutableMap<String, String> = HashMap()
 
-    for (line in args) {
-        if (line.isEmpty()) {
-            if (REQUIRED_FIELDS.keys.all { it in map }) {
-                part1++
-
-                if (REQUIRED_FIELDS.all { (key, validator) -> validator(map[key]!!) }) {
-                    part2++
-                }
-            }
-            map.clear()
-            continue
-        }
-
-        line.splitToSequence(' ')
+    for (passport in splitByBlanks(args)) {
+        val fields = passport.joinToString(separator = " ").splitToSequence(' ')
             .map { it.split(':') }
-            .forEach { (key, value) -> map[key] = value }
+            .associate { (key, value) -> key to value }
+
+        if (REQUIRED_FIELDS.keys.all { it in fields }) {
+            part1++
+
+            if (REQUIRED_FIELDS.all { (key, validator) -> validator(fields[key]!!) }) {
+                part2++
+            }
+        }
     }
 
     println("Part 1: $part1")
