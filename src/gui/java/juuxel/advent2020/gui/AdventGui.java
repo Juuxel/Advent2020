@@ -1,4 +1,4 @@
-package juuxel.adventgui;
+package juuxel.advent2020.gui;
 
 import juuxel.advent2020.arrow.Day1ArrowKt;
 import juuxel.advent2020.cactoos.Day1Cactoos;
