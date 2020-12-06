@@ -10,6 +10,7 @@ import juuxel.advent2020.regular.Day2Kt;
 import juuxel.advent2020.regular.Day3Kt;
 import juuxel.advent2020.regular.Day4Kt;
 import juuxel.advent2020.regular.Day5Kt;
+import juuxel.advent2020.regular.Day6Kt;
 import org.cactoos.io.OutputStreamTo;
 import org.cactoos.io.TeeOutputStream;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,7 @@ public final class AdventGui {
         new Entry("Day 3 (Java, Cactoos)", 3, Day3Cactoos::main),
         new Entry("Day 4 (Kotlin)", 4, Day4Kt::main),
         new Entry("Day 5 (Kotlin)", 5, Day5Kt::main),
+        new Entry("Day 6 (Kotlin)", 6, Day6Kt::main),
     };
 
     public static void main(String[] args) {
