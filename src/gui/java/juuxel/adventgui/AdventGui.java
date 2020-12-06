@@ -44,18 +44,18 @@ public final class AdventGui {
         CURRENT_DAY = Math.min(currentDayUnclamped, 25);
     }
 
-    private static final Entry[] ENTRIES = {
-        new Entry("Day 1 (Kotlin)", 1, Day1Kt::main),
-        new Entry("Day 1 (Kotlin, Arrow)", 1, Day1ArrowKt::nonSuspend),
-        new Entry("Day 1 (Java, Cactoos)", 1, Day1Cactoos::main),
-        new Entry("Day 2 (Kotlin)", 2, Day2Kt::main),
-        new Entry("Day 2 (Java, Cactoos)", 2, Day2Cactoos::main),
-        new Entry("Day 2 (Kotlin + Leaf Through)", 2, Day2AltKt::main),
-        new Entry("Day 3 (Kotlin)", 3, Day3Kt::main),
-        new Entry("Day 3 (Java, Cactoos)", 3, Day3Cactoos::main),
-        new Entry("Day 4 (Kotlin)", 4, Day4Kt::main),
-        new Entry("Day 5 (Kotlin)", 5, Day5Kt::main),
-        new Entry("Day 6 (Kotlin)", 6, Day6Kt::main),
+    private static final Solution[] SOLUTIONS = {
+        new Solution("Day 1 (Kotlin)", 1, Day1Kt::main),
+        new Solution("Day 1 (Kotlin, Arrow)", 1, Day1ArrowKt::nonSuspend),
+        new Solution("Day 1 (Java, Cactoos)", 1, Day1Cactoos::main),
+        new Solution("Day 2 (Kotlin)", 2, Day2Kt::main),
+        new Solution("Day 2 (Java, Cactoos)", 2, Day2Cactoos::main),
+        new Solution("Day 2 (Kotlin + Leaf Through)", 2, Day2AltKt::main),
+        new Solution("Day 3 (Kotlin)", 3, Day3Kt::main),
+        new Solution("Day 3 (Java, Cactoos)", 3, Day3Cactoos::main),
+        new Solution("Day 4 (Kotlin)", 4, Day4Kt::main),
+        new Solution("Day 5 (Kotlin)", 5, Day5Kt::main),
+        new Solution("Day 6 (Kotlin)", 6, Day6Kt::main),
     };
 
     public static void main(String[] args) {
@@ -67,7 +67,7 @@ public final class AdventGui {
             }
 
             JPanel panel = new JPanel(new BorderLayout());
-            JList<Entry> entries = new JList<>(ENTRIES);
+            JList<Solution> solutions = new JList<>(SOLUTIONS);
             JButton run = new JButton("Run");
             JButton load = new JButton("Load input");
             JButton loadToday = new JButton("Today's input");
@@ -77,7 +77,7 @@ public final class AdventGui {
             JPanel inputButtons = new JPanel(new GridLayout(1, 0));
             JScrollPane inputScroll = new JScrollPane(input);
             JScrollPane outputScroll = new JScrollPane(output);
-            JSplitPane sideSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(entries), inputArea);
+            JSplitPane sideSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(solutions), inputArea);
             JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sideSplit, outputScroll);
             JFrame frame = new JFrame("Advent of Code 2020");
 
@@ -99,10 +99,10 @@ public final class AdventGui {
                 }
             };
 
-            entries.setSelectedIndex(0);
-            for (Entry entry : ENTRIES) {
-                if (entry.day() == CURRENT_DAY) {
-                    entries.setSelectedValue(entry, true);
+            solutions.setSelectedIndex(0);
+            for (Solution solution : SOLUTIONS) {
+                if (solution.day() == CURRENT_DAY) {
+                    solutions.setSelectedValue(solution, true);
                     break;
                 }
             }
@@ -119,7 +119,7 @@ public final class AdventGui {
 
             run.addActionListener(e -> {
                 String[] inputLines = input.getText().lines().toArray(String[]::new);
-                EXECUTOR.execute(timed(inputLines, entries.getSelectedValue()));
+                EXECUTOR.execute(timed(inputLines, solutions.getSelectedValue()));
             });
 
             load.addActionListener(e -> {
@@ -156,7 +156,7 @@ public final class AdventGui {
                 setData.accept(day);
             });
 
-            loadToday.addActionListener(e -> setData.accept(entries.getSelectedValue().day()));
+            loadToday.addActionListener(e -> setData.accept(solutions.getSelectedValue().day()));
 
             Writer outputWriter = new TextAreaWriter(output);
             // Sorry Yegor, but this is not "OO". Cactoos' IO converters are just too convenient, though ;)
@@ -173,38 +173,34 @@ public final class AdventGui {
         });
     }
 
-    private static Runnable timed(String[] input, Entry entry) {
+    private static Runnable timed(String[] input, Solution solution) {
         return () -> {
             try {
                 long start = System.nanoTime();
 
-                entry.task().run(input);
+                solution.task().run(input);
 
                 long end = System.nanoTime();
                 long duration = end - start;
                 double durationMs = (double) duration / 1_000_000.0;
-                String durationMessage = ">>> Completed '" + entry.name() + "' in " + duration + " ns = " + TIME_FORMAT.format(durationMs) + " ms";
+                String durationMessage = ">>> Completed '" + solution.name() + "' in " + duration + " ns = " + TIME_FORMAT.format(durationMs) + " ms";
 
                 if (durationMs >= 1000) {
-                    double durationS = (double) durationMs / 1000.0;
+                    double durationS = durationMs / 1000.0;
                     durationMessage += " = " + TIME_FORMAT.format(durationS) + " s";
                 }
 
                 System.out.println(durationMessage);
                 System.out.println();
             } catch (Exception e) {
-                System.err.println(">>> '" + entry.name() + "' errored!");
+                System.err.println(">>> '" + solution.name() + "' errored!");
                 e.printStackTrace();
                 System.err.println();
             }
         };
     }
 
-    private record Entry(String name, int day, ThrowingMain task) {
-        Entry(String name, int day, ThrowingRunnable task) {
-            this(name, day, args -> task.run());
-        }
-
+    private record Solution(String name, int day, ThrowingMain task) {
         @Override
         public String toString() {
             return name;
@@ -214,11 +210,6 @@ public final class AdventGui {
     @FunctionalInterface
     private interface ThrowingMain {
         void run(String[] args) throws Exception;
-    }
-
-    @FunctionalInterface
-    private interface ThrowingRunnable {
-        void run() throws Exception;
     }
 
     private static final class TextAreaWriter extends Writer {
