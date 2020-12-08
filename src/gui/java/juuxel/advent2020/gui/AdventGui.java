@@ -5,13 +5,7 @@ import juuxel.advent2020.cactoos.Day1Cactoos;
 import juuxel.advent2020.cactoos.Day2Cactoos;
 import juuxel.advent2020.cactoos.Day3Cactoos;
 import juuxel.advent2020.misc.Day2AltKt;
-import juuxel.advent2020.regular.Day1Kt;
-import juuxel.advent2020.regular.Day2Kt;
-import juuxel.advent2020.regular.Day3Kt;
-import juuxel.advent2020.regular.Day4Kt;
-import juuxel.advent2020.regular.Day5Kt;
-import juuxel.advent2020.regular.Day6Kt;
-import juuxel.advent2020.regular.Day7Kt;
+import juuxel.advent2020.regular.*;
 import org.cactoos.io.OutputStreamTo;
 import org.cactoos.io.TeeOutputStream;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +52,7 @@ public final class AdventGui {
         new Solution("Day 5 (Kotlin)", 5, Day5Kt::main),
         new Solution("Day 6 (Kotlin)", 6, Day6Kt::main),
         new Solution("Day 7 (Kotlin)", 7, Day7Kt::main),
+        new Solution("Day 8 (Kotlin)", 8, Day8Kt::main),
     };
 
     public static void main(String[] args) {
