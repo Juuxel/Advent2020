@@ -53,6 +53,7 @@ public final class AdventGui {
         new Solution("Day 6 (Kotlin)", 6, Day6Kt::main),
         new Solution("Day 7 (Kotlin)", 7, Day7Kt::main),
         new Solution("Day 8 (Kotlin)", 8, Day8Kt::main),
+        new Solution("Day 9 (Kotlin)", 9, Day9Kt::main),
     };
 
     public static void main(String[] args) {
